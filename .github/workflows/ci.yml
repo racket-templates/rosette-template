@@ -1,0 +1,26 @@
+on: [push, pull_request]
+name: CI
+jobs:
+  build:
+    name: "Build on Racket '${{ matrix.racket-version }}' (${{ matrix.racket-variant }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        racket-version: ["7.9", "current"]
+        racket-variant: ["regular", "CS"]
+        exclude:
+          # 7.9 CS has a bug, so exclude it
+          - racket-version: '7.9'
+            racket-variant: 'CS'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Bogdanp/setup-racket@v0.10
+        with:
+          architecture: x64
+          distribution: full
+          variant: ${{ matrix.racket-variant }}
+          version: ${{ matrix.racket-version }}
+      - run: |
+          raco pkg install --auto
+          raco test -x .
