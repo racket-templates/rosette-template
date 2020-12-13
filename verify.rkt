@@ -13,8 +13,8 @@
 (define reg-size 6)
 
 ;; reg-size - 1 must fit in index?
-(define index? (bitvector 4))
-(define value? (bitvector 8))
+(define index? (bitvector 4)) ; bitwidth = 4 (-8 to 7)
+(define value? (bitvector 8)) ; bitwidth = 8 (-128 to 127)
 
 (define (make-index idx) (bv idx index?))
 (define (make-value val) (bv val value?))
